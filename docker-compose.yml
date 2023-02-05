@@ -1,0 +1,29 @@
+version: '3.8'
+
+services:
+  server:
+    container_name: server_go
+    build: ./server
+    tty: true
+    ports:
+      - 3000:3000
+    env_file:
+      - ./database/.env
+    depends_on: # サービス(db)が起動した後に自身(go)が起動
+      - db
+    volumes:
+      - ./server/src:/go/src/server # マウントするディレクトリの指定
+
+  db: 
+    platform: linux/x86_64 # M1Mac用にプラットフォームを指定
+    container_name: db
+    image: mysql:8.0
+    env_file:
+      - ./database/.env
+    command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./database/init:/docker-entrypoint-initdb.d
+      - ./database/my.cnf:/etc/mysql/conf.d/my.cnf 
+      # - ./database/db/logs:/var/logs/mysql
