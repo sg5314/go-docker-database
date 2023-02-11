@@ -1,20 +1,19 @@
 # go-docker-database
 
-
-
-
 ```
 docker-compose build
-docker-compose up -d
+docker compose up -d 
 ```
 
+```
+docker exec -it db /bin/bash
+mysql -u{root} -p{???}
+```
 
 ```
-docker exec -it db bash
+docker-compose exec server sh
 ```
 
-
 ```
-docker network create golang_test_network
-docker network rm golang_test_network
+docker-compose down -v
 ```
